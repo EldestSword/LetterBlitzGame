@@ -29,7 +29,7 @@ Do not casually drag it into framework-land because a shiny abstraction looked l
    - unique valid answer = 1
    - unique valid alliterative answer = 2
 3. **Keep British English** in UI copy and documentation.
-4. **Assume a maximum of 5 competitors** unless explicitly changed.
+4. **Assume a maximum of 8 competitors** unless explicitly changed.
 5. **Keep local storage support** or provide a safe migration if storage keys change.
 
 ## Change strategy
@@ -41,6 +41,15 @@ Until the user asks otherwise:
 - do not introduce a build step
 - do not add package tooling
 - do not add CDNs or third-party libraries unless there is a very strong reason
+
+## Documentation and versioning rules
+
+For any user-facing or repo-relevant change:
+
+1. **Always update `CHANGELOG.md`** in the same piece of work.
+2. **Bump the version** for any meaningful change.
+3. Keep changelog entries clear and human-readable.
+4. Preserve British English in documentation.
 
 ## Response style for future code changes
 

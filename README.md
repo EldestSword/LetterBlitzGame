@@ -6,7 +6,7 @@ It is built for the practical version of remote play, not the fantasy version wh
 
 The tool keeps everything in a single `index.html` file for the first draft, with:
 
-- up to **5 competitors**
+- up to **8 competitors**
 - **10, 11, or 12 categories** per round
 - **60, 75, or 90 second** timers
 - a **random letter spinner**
@@ -160,4 +160,4 @@ If you want a clean slate, use **Reset session** in the UI.
 
 ## Version
 
-First draft: **0.1.0**
+Current version: **0.2.0**
