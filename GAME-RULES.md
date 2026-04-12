@@ -4,7 +4,7 @@
 
 This version is designed for:
 
-- up to **5 competitors**
+- up to **8 competitors**
 - **10 to 12 categories**
 - **60 to 90 seconds**
 - one answer per category, per player
@@ -108,7 +108,7 @@ You can turn that off if you want to watch morale collapse in real time.
 For speed, reveal row by row:
 
 1. read the category aloud
-2. type Player 1 to Player 5 answers across the row
+2. type Player 1 to Player 8 answers across the row
 3. reject anything dodgy
 4. let the board instantly flag duplicates and bonuses
 5. move to the next row
