@@ -1,150 +1,56 @@
 # Game Rules
 
-## Recommended format
+## Round flow
 
-This version is designed for:
-
-- up to **8 competitors**
-- **10 to 12 categories**
-- **60 to 90 seconds**
-- one answer per category, per player
-
-The default setup in the first draft is:
-
-- **12 categories**
-- **75 seconds**
-- **friendly letters only**
-
-That gives you enough panic to be funny without turning the reveal into clerical work.
-
-## How to run a round
-
-1. Spin a new round to generate:
-   - one letter
-   - a fresh set of categories
+1. Spin a round to generate one letter and a category set.
 2. Start the timer.
-3. Players write their answers privately.
-4. During the reveal, the host types each answer into the board.
-5. Everyone can see the grid fill in live.
-6. If an answer is nonsense, off-category, or otherwise not acceptable, the host clicks **Reject**.
-7. The tool calculates points automatically.
-8. Commit the round to add those points to the running totals.
+3. Players answer privately.
+4. During reveal, the host types answers into the board.
+5. Reject any answer that should not count.
+6. Commit the round to add totals to the session leaderboard.
 
-## Scoring
+## Core scoring
 
-### Base scoring
+- Blank answer: **0**
+- Wrong starting letter: **0**
+- Rejected answer: **0**
+- Unique valid answer: **1**
+- Unique valid alliterative answer: **2**
 
-- blank answer = **0**
-- wrong starting letter = **0**
-- rejected answer = **0**
-- unique valid answer = **1**
-- duplicate valid answer = **0** for every matching player in that category
+## Duplicate rule (across players, same category)
 
-## Duplicate rule
+Duplicates are checked within each category row.
 
-Duplicates are checked **within the same category row only**.
+If two or more competitors give the same valid answer in that row, all matching cells score **0**.
 
-If two or more players give the same valid answer for that category:
+## Repeated-answer rule (same player, across categories)
 
-- none of them score for that answer
+Within one round, if the same competitor uses the same accepted answer in more than one category, every repeated use of that answer in that round scores **0**.
 
-Example for category **Fruit**, letter **B**:
+Example (letter **L**):
 
-- Player 1: `Banana`
-- Player 2: `Banana`
-- Player 3: `Blueberry`
+- Drink: `Lemonade`
+- Something nice on a hot day: `Lemonade`
 
-Scores:
+Result: both score **0** for that competitor.
 
-- Player 1 = **0**
-- Player 2 = **0**
-- Player 3 = **1**
+## How duplicate and repeated checks differ
 
-## Alliteration bonus
+- **Duplicate rule** compares players against each other in one category row.
+- **Repeated-answer rule** compares one player against their own answers across category rows.
 
-If an accepted answer has **two or more meaningful words** and **all meaningful words begin with the round letter**, it scores **2 points** instead of 1.
+Both checks use normalised scoring text and are recalculated live while editing.
 
-Example for letter **B**:
+## Alliteration interaction
 
-- `Boris Becker` = **2**
-- `Big Ben` = **2**
-- `Baked Beans` = **2**
+Alliteration only awards 2 points when an answer is:
 
-### Important
+- valid,
+- unique within its category row,
+- and not repeated by the same player elsewhere in the same round.
 
-- the answer still has to be valid for the category
-- duplicates still score **0**
-- the bonus only applies to **unique** valid answers
-
-So if two players both write `Boris Becker`, both get **0**, not 2.
-
-## Host judgement
-
-The browser can tidy and score text, but it cannot reliably decide whether a human answer genuinely fits the category.
-
-That means the host still decides things like:
-
-- whether `Bourbon` counts as a snack
-- whether `Blue Whale` is acceptable in the category shown
-- whether a vague answer is too flimsy to allow
-
-That is why the **Reject** button exists.
+If an answer is duplicate or repeated, it does not keep the alliteration bonus.
 
 ## Friendly letters mode
 
-Friendly letters mode avoids the letters that tend to produce grim, joyless rounds:
-
-- `Q`
-- `U`
-- `V`
-- `X`
-- `Y`
-- `Z`
-
-You can turn that off if you want to watch morale collapse in real time.
-
-## Suggested reveal workflow
-
-For speed, reveal row by row:
-
-1. read the category aloud
-2. type Player 1 to Player 8 answers across the row
-3. reject anything dodgy
-4. let the board instantly flag duplicates and bonuses
-5. move to the next row
-
-That is faster than jumping around by player.
-
-## Tie handling
-
-The current draft does not include a formal tie-breaker.
-
-If you need one, use a sudden-death category with:
-
-- 1 category
-- 1 letter
-- 20 to 30 seconds
-- fastest valid unique answer wins
-
-## Good category design
-
-Strong categories are:
-
-- broad enough to allow several answers
-- specific enough to avoid endless arguments
-- easy to read on a shared screen
-
-Examples of good categories:
-
-- `Sports person`
-- `Something found in a kitchen`
-- `TV programme`
-- `Something you'd put on toast`
-
-Examples of categories more likely to start arguments:
-
-- `Thing that feels fancy`
-- `Something annoying`
-- `A good idea`
-
-Humans can argue about absolutely anything, but there is no need to help them.
+Friendly letters mode skips: `Q`, `U`, `V`, `X`, `Y`, `Z`.

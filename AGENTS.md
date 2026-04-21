@@ -8,13 +8,13 @@ This repo contains a **host-led, browser-only, Teams-friendly letter/category ga
 
 The current product shape is deliberate:
 
-- **single-file first draft**
+- **split static structure (`index.html`, `styles.css`, `app.js`, `data/categories.json`)**
 - **no backend**
 - **no accounts**
 - **no room codes**
 - **no external dependencies**
 - **manual host validation**
-- **automatic duplicate + alliteration scoring**
+- **automatic duplicate + repeated-answer + alliteration scoring**
 
 Do not casually drag it into framework-land because a shiny abstraction looked lonely.
 
@@ -26,6 +26,7 @@ Do not casually drag it into framework-land because a shiny abstraction looked l
    - wrong letter = 0
    - rejected answer = 0
    - duplicate valid answers in the same category = 0 for all duplicates
+   - repeated accepted answers by the same competitor across categories in one round = 0 for all repeated uses
    - unique valid answer = 1
    - unique valid alliterative answer = 2
 3. **Keep British English** in UI copy and documentation.
@@ -36,7 +37,11 @@ Do not casually drag it into framework-land because a shiny abstraction looked l
 
 Until the user asks otherwise:
 
-- keep everything in **`index.html`**
+- keep the split static structure:
+  - `index.html`
+  - `styles.css`
+  - `app.js`
+  - `data/categories.json`
 - prefer **small, careful refactors**
 - do not introduce a build step
 - do not add package tooling
@@ -50,15 +55,6 @@ For any user-facing or repo-relevant change:
 2. **Bump the version** for any meaningful change.
 3. Keep changelog entries clear and human-readable.
 4. Preserve British English in documentation.
-
-## Response style for future code changes
-
-When providing edits for this repo:
-
-- return **complete file contents**, not partial patches, unless the user explicitly asks for a diff
-- explain changes in plain language
-- write for a **non-coder**
-- keep naming clear and literal
 
 ## UX expectations
 
@@ -95,41 +91,17 @@ Avoid:
 ### Scoring logic
 
 - duplicate detection happens **within each category row only**
-- duplicates should be calculated **after invalid/rejected answers are excluded**
+- same-player repeated-answer detection happens **across categories within one round**
+- both duplicate/repeated checks run **after invalid and rejected answers are excluded**
 - alliteration is a **bonus**, not a replacement scoring mode
 - duplicate answers never keep the alliteration bonus
+- repeated answers never keep the alliteration bonus
 
 ### Input tidying
 
 - normalise for scoring
 - keep visible text tidy but predictable
 - do not over-aggressively “fix” user-entered wording
-
-## Testing checklist
-
-Before handing over changes, check these manually if the feature touches them:
-
-1. Can a new round be spun cleanly?
-2. Does the timer still start, pause, and reset?
-3. Do answer inputs keep working?
-4. Do duplicates still zero out correctly?
-5. Does the alliteration bonus still apply correctly?
-6. Can the host reject an answer and see duplicates recalculate?
-7. Do round totals and overall totals still match?
-8. Does refresh persistence still behave sensibly?
-9. Does the layout still look sane on a standard desktop browser window?
-
-## Future refactor path
-
-If the repo grows, refactor in this order:
-
-1. split `index.html` into:
-   - `index.html`
-   - `styles.css`
-   - `app.js`
-2. move the category bank into a separate data file
-3. add import/export utilities
-4. only then consider more advanced architecture
 
 ## Things not to do unless explicitly asked
 
