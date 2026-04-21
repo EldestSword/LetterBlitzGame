@@ -1,8 +1,8 @@
     (() => {
       "use strict";
 
-      const STORAGE_KEY = "letter-blitz-host-edition/v0.3.0";
-      const LEGACY_STORAGE_KEYS = ["letter-blitz-host-edition/v0.2.0", "letter-blitz-host-edition/v0.1.0"];
+      const STORAGE_KEY = "letter-blitz-host-edition/v0.4.0";
+      const LEGACY_STORAGE_KEYS = ["letter-blitz-host-edition/v0.3.0", "letter-blitz-host-edition/v0.2.0", "letter-blitz-host-edition/v0.1.0"];
       const FRIENDLY_LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "R", "S", "T", "W"];
       const HARD_LETTERS = ["Q", "U", "V", "X", "Y", "Z"];
       const PLAYER_COLOURS = ["var(--player-1)", "var(--player-2)", "var(--player-3)", "var(--player-4)", "var(--player-5)", "var(--player-6)", "var(--player-7)", "var(--player-8)"];
@@ -51,6 +51,10 @@
         historyModal: document.getElementById("historyModal"),
         rulesModal: document.getElementById("rulesModal"),
         categoryDataStatus: document.getElementById("categoryDataStatus"),
+        setupView: document.getElementById("setupView"),
+        gameView: document.getElementById("gameView"),
+        startSessionBtn: document.getElementById("startSessionBtn"),
+        backToSetupBtn: document.getElementById("backToSetupBtn"),
       };
 
       init();
@@ -60,6 +64,7 @@
         state = loadState();
         ensureStateShape();
         bindEvents();
+        renderView();
         updateSegments();
         renderPlayers();
         renderHero();
@@ -92,6 +97,9 @@
             remaining: 75,
             running: false,
             finished: false,
+          },
+          ui: {
+            activeView: "setup",
           },
         };
       }
@@ -149,6 +157,15 @@
           state.timer.finished = false;
         }
 
+        if (!state.ui || typeof state.ui !== "object") {
+          state.ui = { activeView: "setup" };
+        }
+
+        const hasLiveUnfinalisedRound = Boolean(state.currentRound && !state.currentRound.committed);
+        const validViews = ["setup", "game"];
+        const persistedView = validViews.includes(state.ui.activeView) ? state.ui.activeView : "setup";
+        state.ui.activeView = hasLiveUnfinalisedRound ? "game" : persistedView;
+
         saveState();
       }
 
@@ -161,6 +178,8 @@
         els.exportSummaryBtn.addEventListener("click", handleExportSummary);
         els.resetSessionBtn.addEventListener("click", handleResetSession);
         els.friendlyLettersToggle.addEventListener("change", handleFriendlyLettersToggle);
+        els.startSessionBtn.addEventListener("click", handleStartSession);
+        els.backToSetupBtn.addEventListener("click", handleBackToSetup);
 
         if (els.openRulesBtn && els.rulesModal) {
           els.openRulesBtn.addEventListener("click", () => openModal(els.rulesModal));
@@ -239,6 +258,29 @@
       }
 
 
+
+
+
+      function renderView() {
+        const activeView = state.ui?.activeView === "game" ? "game" : "setup";
+        els.setupView.hidden = activeView !== "setup";
+        els.gameView.hidden = activeView !== "game";
+        els.backToSetupBtn.hidden = activeView !== "game";
+      }
+
+      function setActiveView(view) {
+        state.ui.activeView = view === "game" ? "game" : "setup";
+        saveState();
+        renderView();
+      }
+
+      function handleStartSession() {
+        setActiveView("game");
+      }
+
+      function handleBackToSetup() {
+        setActiveView("setup");
+      }
 
       async function loadCategoryBank() {
         categoryLoadError = "";
@@ -362,6 +404,7 @@
         els.spinRoundBtn.textContent = "Spin round";
         els.roundLetter.classList.remove("is-spinning");
 
+        setActiveView("game");
         renderHero();
         renderAnswerBoard();
         renderLeaderboard();
@@ -487,7 +530,7 @@
         lines.push("");
 
         if (state.history.length) {
-          lines.push("## Committed rounds");
+          lines.push("## Finalised rounds");
           lines.push("");
           [...state.history].reverse().forEach((round) => {
             lines.push(`### Round ${round.roundNumber} — Letter ${round.letter}`);
@@ -501,7 +544,7 @@
             lines.push("");
           });
         } else {
-          lines.push("## Committed rounds");
+          lines.push("## Finalised rounds");
           lines.push("");
           lines.push("- None yet");
           lines.push("");
@@ -532,6 +575,7 @@
         clearTimeUpFlash();
         localStorage.removeItem(STORAGE_KEY);
         state = createDefaultState();
+        state.ui.activeView = "setup";
         saveState();
         updateSegments();
         renderPlayers();
@@ -645,7 +689,7 @@
 
         if (!hasRound) {
           els.heroTitle.textContent = "Spin the next round";
-          els.heroSubtitle.textContent = categoryLoadError ? "Category list unavailable. Fix the file path and refresh." : "Set players, spin, then score.";
+          els.heroSubtitle.textContent = categoryLoadError ? "Category list unavailable. Fix the file path and refresh." : "Spin when ready.";
           els.heroMeta.innerHTML = [
             makeMetaPill(`Round ${displayedRoundNumber} queued`),
             makeMetaPill(`${state.players.length} player${state.players.length === 1 ? "" : "s"} ready`),
@@ -656,9 +700,9 @@
         } else {
           const roundSummary = computeRoundSummary(state.currentRound);
           const leaderName = findLiveRoundLeader(roundSummary.totals);
-          let subtitle = "Type answers, reject dodgy ones, and keep it moving.";
+          let subtitle = "Enter answers and keep the round moving.";
           if (state.currentRound.committed) {
-            subtitle = "This round is committed and locked in. Spin the next one when you are ready.";
+            subtitle = "Round finalised. Spin when you are ready.";
           } else if (state.timer.running) {
             subtitle = "Timer running.";
           } else if (state.timer.finished) {
@@ -710,12 +754,12 @@
           els.answerBoardContainer.innerHTML = `
             <div class="empty-state">
               <div class="empty-badge">LB</div>
-              <h3>No live round yet</h3><p>Spin a round to start scoring.</p>
+              <h3>No live round yet</h3><p>Spin a round to begin.</p>
             </div>
           `;
           els.boardSummary.innerHTML = `
             <span class="meta-pill">No live round</span>
-            <span class="meta-pill">Scores will appear here once the board is active</span>
+            <span class="meta-pill">Scores appear once the board is live</span>
           `;
           return;
         }
@@ -728,7 +772,7 @@
             <tr>
               <th class="sticky-col corner-cell">
                 <span class="corner-title">Category</span>
-                <span class="corner-copy">Enter across each row.</span>
+                <span class="corner-copy">One answer per player.</span>
               </th>
               ${state.players.map((player, index) => `
                 <th class="player-head" style="--player:${PLAYER_COLOURS[index % PLAYER_COLOURS.length]}">
@@ -737,7 +781,7 @@
                       <span class="player-dot"></span>
                       <span class="player-name">${escapeHtml(player.name)}</span>
                     </div>
-                    <div class="player-small">One per row</div>
+                    <div class="player-small">Host entry</div>
                   </div>
                 </th>
               `).join("")}
@@ -886,7 +930,7 @@
           makeMetaPill(`${enteredAnswers} / ${totalSlots} answers entered`),
           makeMetaPill(`Letter ${state.currentRound.letter} live`),
           makeMetaPill(leaderName ? `Current leader: ${leaderName}` : "Current leader: nobody yet"),
-          makeMetaPill("Row duplicates + same-player repeats auto-zero")
+          makeMetaPill("Duplicates and repeats auto-zero")
         ].join("");
 
         renderLeaderboard(summary.totals);
@@ -939,7 +983,7 @@
 
       function renderHistory() {
         if (!state.history.length) {
-          els.historyList.innerHTML = `<p class="placeholder-note">No rounds committed yet.</p>`;
+          els.historyList.innerHTML = `<p class="placeholder-note">No rounds finalised yet.</p>`;
           return;
         }
 
@@ -997,7 +1041,7 @@
         els.startPauseTimerBtn.disabled = isSpinning || !hasRound || committed;
         els.resetTimerBtn.disabled = isSpinning || !hasRound;
         els.commitRoundBtn.disabled = isSpinning || !hasRound || committed;
-        els.commitRoundBtn.textContent = committed ? "Round committed" : "Commit round";
+        els.commitRoundBtn.textContent = committed ? "Round finalised" : "Finalise round";
         els.startPauseTimerBtn.textContent = state.timer.running ? "Pause timer" : (state.timer.remaining < state.settings.roundSeconds && !state.timer.finished ? "Resume timer" : "Start timer");
       }
 
@@ -1022,7 +1066,7 @@
 
         if (state.currentRound.committed) {
           els.timerStatus.textContent = "Locked";
-          els.timerHelper.textContent = "Round committed";
+          els.timerHelper.textContent = "Round finalised";
           return;
         }
 

@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is inspired by Keep a Changelog.
 Versioning is lightweight for now because this is an early internal tool, not a spacecraft.
 
+## [0.4.0] - 2026-04-21
+
+### Changed
+
+- introduced a setup-first UX with separate **Setup** and **Game** views
+- moved full session setup controls off the live game screen into a dedicated setup screen
+- added **Start session** and **Session settings** controls to switch views without wiping active session state
+- kept Rules and Round history as modals while further decluttering the live screen
+- trimmed live-screen explainer copy so the host view is more operational during play
+- renamed UI action text from **Commit round** to **Finalise round**, with committed state shown as **Round finalised**
+- made reject controls lighter and answer-row meta spacing tighter to reduce visual bulk while keeping fast host review
+- bumped local storage key to `letter-blitz-host-edition/v0.4.0` with safe legacy load from `v0.3.0`, `v0.2.0`, and `v0.1.0`
+
 ## [0.3.0] - 2026-04-12
 
 ### Changed
