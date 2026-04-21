@@ -6,8 +6,9 @@
 2. Start the timer.
 3. Players answer privately.
 4. During reveal, the host types answers into the board.
-5. Reject any answer that should not count.
-6. Commit the round to add totals to the session leaderboard.
+5. Leave blank answers empty (they score 0).
+6. Reject any answer that should not count.
+7. Finalise the round to add totals to the session leaderboard.
 
 ## Core scoring
 

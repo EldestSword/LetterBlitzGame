@@ -1434,3 +1434,43 @@
 .modal-head h2 { margin:0; font-size:1.2rem; }
 .rules-list { margin: 0; padding-left: 18px; display:grid; gap:8px; color: var(--muted); }
 .history-modal-trigger { width: 100%; }
+
+/* v0.4.0 setup-first flow */
+.view-panel[hidden] { display: none !important; }
+.setup-layout {
+  max-width: 760px;
+  margin: 0 auto;
+}
+.setup-card { padding: 24px; }
+.start-session-btn {
+  width: 100%;
+  margin-top: 16px;
+  min-height: 46px;
+  font-weight: 700;
+}
+.layout-game {
+  grid-template-columns: minmax(0, 1fr) 330px;
+}
+.sidebar-game { top: 18px; }
+.card-header.compact p,
+.card-header.compact h2 { margin-bottom: 0; }
+.answers-copy h2 { margin: 0; }
+.hero-subtitle { max-width: 42ch; }
+.board-summary { margin-bottom: 12px; }
+.cell-meta {
+  margin-top: 4px !important;
+  gap: 5px !important;
+}
+.review-toggle {
+  min-height: 22px !important;
+  padding: 2px 7px !important;
+  font-size: 0.72rem !important;
+  border-color: rgba(173, 201, 255, 0.26);
+  background: rgba(167, 182, 207, 0.1);
+}
+.review-toggle.is-rejected {
+  background: rgba(255, 111, 145, 0.14);
+}
+@media (max-width: 1440px) {
+  .layout-game { grid-template-columns: minmax(0, 1fr); }
+}

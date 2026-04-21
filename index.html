@@ -20,112 +20,20 @@
       </div>
 
       <div class="topbar-actions">
+        <button id="backToSetupBtn" class="btn ghost" hidden>Session settings</button>
         <button id="openRulesBtn" class="btn ghost">Rules</button>
         <button id="exportSummaryBtn" class="btn soft">Export</button>
         <button id="resetSessionBtn" class="btn danger">Reset</button>
       </div>
     </header>
 
-    <div class="layout">
-      <div class="main-column">
-        <section class="panel hero-panel">
-          <div class="hero-grid">
-            <div class="hero-copy">
-              <div>
-                <p class="eyebrow">Current round</p>
-                <h2 id="heroTitle" class="hero-title">Spin the next round</h2>
-                <p id="heroSubtitle" class="hero-subtitle">Set players, spin, and score quickly.</p>
-              </div>
-
-              <div id="heroMeta" class="hero-meta" aria-live="polite"></div>
-
-              <div class="hero-actions">
-                <button id="spinRoundBtn" class="btn primary">Spin round</button>
-                <button id="startPauseTimerBtn" class="btn soft">Start timer</button>
-                <button id="resetTimerBtn" class="btn ghost">Reset timer</button>
-                <button id="commitRoundBtn" class="btn success">Commit round</button>
-              </div>
-            </div>
-
-            <div class="hero-stage">
-              <div class="stage-stack">
-                <div class="letter-orb-card">
-                  <div id="roundLetter" class="letter-orb" aria-live="polite">?</div>
-                  <div id="letterCaption" class="letter-caption">Friendly letters on</div>
-                </div>
-
-                <div id="timerCard" class="timer-card">
-                  <div class="timer-head">
-                    <h3 class="timer-title">Round timer</h3>
-                    <div id="timerStatus" class="timer-status">Ready</div>
-                  </div>
-
-                  <div class="timer-visual">
-                    <svg class="timer-ring" viewBox="0 0 164 164" aria-hidden="true">
-                      <defs>
-                        <linearGradient id="timerGradient" x1="0%" x2="100%" y1="0%" y2="100%">
-                          <stop offset="0%" stop-color="#32d4ff"></stop>
-                          <stop offset="100%" stop-color="#8f70ff"></stop>
-                        </linearGradient>
-                      </defs>
-                      <circle class="timer-ring-track" cx="82" cy="82" r="72"></circle>
-                      <circle id="timerRingProgress" class="timer-ring-progress" cx="82" cy="82" r="72"></circle>
-                    </svg>
-
-                    <div class="timer-readout">
-                      <div id="timerValue" class="timer-value">1:15</div>
-                      <div id="timerHelper" class="timer-helper">Ready to start</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="category-preview-card">
-                <div class="section-head">
-                  <div>
-                    <h3 class="section-title">Category board</h3>
-                    <p class="section-copy">Categories for the current round.</p>
-                  </div>
-                  <div id="categoryCountTag" class="section-tag">12 categories</div>
-                </div>
-
-                <div id="categoryPreview" class="category-preview-grid" aria-live="polite"></div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="panel answers-panel">
-          <div class="answers-head">
-            <div class="answers-copy">
-              <p class="eyebrow">Answer reveal board</p>
-              <h2>Live scoring board</h2>
-              <p>Fast host entry with automatic scoring.</p>
-            </div>
-
-            <div class="legend" aria-label="Scoring legend">
-              <span id="categoryDataStatus" class="category-data-status"></span>
-              <span class="legend-item badge-blank">Blank</span>
-              <span class="legend-item badge-valid">1 pt</span>
-              <span class="legend-item badge-alliteration">2 pts · allit</span>
-              <span class="legend-item badge-duplicate">Duplicate</span>
-              <span class="legend-item badge-repeat">Repeated this round</span>
-              <span class="legend-item badge-invalid">Rejected / wrong letter</span>
-            </div>
-          </div>
-
-          <div id="boardSummary" class="board-summary"></div>
-
-          <div id="answerBoardContainer"></div>
-        </section>
-      </div>
-
-      <aside class="sidebar">
-        <section class="panel sidebar-card">
+    <section id="setupView" class="view-panel">
+      <div class="setup-layout">
+        <section class="panel sidebar-card setup-card">
           <div class="card-header">
             <p class="eyebrow">Session setup</p>
-            <h2>Players & round settings</h2>
-            <p>Set competitors and round options.</p>
+            <h2>Ready the next session</h2>
+            <p>Set competitors and round options, then start.</p>
           </div>
 
           <div class="sidebar-block">
@@ -163,30 +71,123 @@
               <span class="toggle-detail">Skips Q, U, V, X, Y and Z.</span>
             </span>
           </label>
-        </section>
 
-        <section class="panel sidebar-card">
-          <div class="card-header">
-            <p class="eyebrow">Leaderboard</p>
-            <h2>Live scores</h2>
-            <p>Round totals update live.</p>
-          </div>
-
-          <div id="leaderboardList" class="leaderboard-list"></div>
+          <button id="startSessionBtn" class="btn primary start-session-btn">Start session</button>
         </section>
+      </div>
+    </section>
 
-        <section class="panel sidebar-card">
-          <div class="card-header">
-            <p class="eyebrow">Round history</p>
-            <h2>Committed rounds</h2>
-            <p>Open full history in a popup.</p>
-          </div>
-          <button id="openHistoryBtn" class="btn soft history-modal-trigger">Open history</button>
-        </section>
-      </aside>
-    </div>
+    <section id="gameView" class="view-panel" hidden>
+      <div class="layout layout-game">
+        <div class="main-column">
+          <section class="panel hero-panel">
+            <div class="hero-grid">
+              <div class="hero-copy">
+                <div>
+                  <p class="eyebrow">Current round</p>
+                  <h2 id="heroTitle" class="hero-title">Spin the next round</h2>
+                  <p id="heroSubtitle" class="hero-subtitle">Ready for live play.</p>
+                </div>
+
+                <div id="heroMeta" class="hero-meta" aria-live="polite"></div>
+
+                <div class="hero-actions">
+                  <button id="spinRoundBtn" class="btn primary">Spin round</button>
+                  <button id="startPauseTimerBtn" class="btn soft">Start timer</button>
+                  <button id="resetTimerBtn" class="btn ghost">Reset timer</button>
+                  <button id="commitRoundBtn" class="btn success">Finalise round</button>
+                </div>
+              </div>
+
+              <div class="hero-stage">
+                <div class="stage-stack">
+                  <div class="letter-orb-card">
+                    <div id="roundLetter" class="letter-orb" aria-live="polite">?</div>
+                    <div id="letterCaption" class="letter-caption">Friendly letters on</div>
+                  </div>
+
+                  <div id="timerCard" class="timer-card">
+                    <div class="timer-head">
+                      <h3 class="timer-title">Round timer</h3>
+                      <div id="timerStatus" class="timer-status">Ready</div>
+                    </div>
+
+                    <div class="timer-visual">
+                      <svg class="timer-ring" viewBox="0 0 164 164" aria-hidden="true">
+                        <defs>
+                          <linearGradient id="timerGradient" x1="0%" x2="100%" y1="0%" y2="100%">
+                            <stop offset="0%" stop-color="#32d4ff"></stop>
+                            <stop offset="100%" stop-color="#8f70ff"></stop>
+                          </linearGradient>
+                        </defs>
+                        <circle class="timer-ring-track" cx="82" cy="82" r="72"></circle>
+                        <circle id="timerRingProgress" class="timer-ring-progress" cx="82" cy="82" r="72"></circle>
+                      </svg>
+
+                      <div class="timer-readout">
+                        <div id="timerValue" class="timer-value">1:15</div>
+                        <div id="timerHelper" class="timer-helper">Ready to start</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="category-preview-card">
+                  <div class="section-head">
+                    <h3 class="section-title">Categories</h3>
+                    <div id="categoryCountTag" class="section-tag">12 categories</div>
+                  </div>
+
+                  <div id="categoryPreview" class="category-preview-grid" aria-live="polite"></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel answers-panel">
+            <div class="answers-head">
+              <div class="answers-copy">
+                <h2>Answer board</h2>
+              </div>
+
+              <div class="legend" aria-label="Scoring legend">
+                <span id="categoryDataStatus" class="category-data-status"></span>
+                <span class="legend-item badge-blank">Blank</span>
+                <span class="legend-item badge-valid">1 pt</span>
+                <span class="legend-item badge-alliteration">2 pts · allit</span>
+                <span class="legend-item badge-duplicate">Duplicate</span>
+                <span class="legend-item badge-repeat">Repeated this round</span>
+                <span class="legend-item badge-invalid">Rejected / wrong letter</span>
+              </div>
+            </div>
+
+            <div id="boardSummary" class="board-summary"></div>
+
+            <div id="answerBoardContainer"></div>
+          </section>
+        </div>
+
+        <aside class="sidebar sidebar-game">
+          <section class="panel sidebar-card">
+            <div class="card-header compact">
+              <p class="eyebrow">Leaderboard</p>
+              <h2>Live scores</h2>
+            </div>
+
+            <div id="leaderboardList" class="leaderboard-list"></div>
+          </section>
+
+          <section class="panel sidebar-card">
+            <div class="card-header compact">
+              <p class="eyebrow">Round history</p>
+              <h2>Finalised rounds</h2>
+            </div>
+            <button id="openHistoryBtn" class="btn soft history-modal-trigger">Open history</button>
+          </section>
+        </aside>
+      </div>
+    </section>
   </div>
-
 
   <div id="rulesModal" class="modal" hidden>
     <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="rulesModalTitle">
