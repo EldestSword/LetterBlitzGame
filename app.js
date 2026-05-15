@@ -1,13 +1,34 @@
     (() => {
       "use strict";
 
-      const STORAGE_KEY = "letter-blitz-host-edition/v0.4.0";
-      const LEGACY_STORAGE_KEYS = ["letter-blitz-host-edition/v0.3.0", "letter-blitz-host-edition/v0.2.0", "letter-blitz-host-edition/v0.1.0"];
+      const STORAGE_KEY = "letter-blitz-host-edition/v0.5.0";
+      const LEGACY_STORAGE_KEYS = ["letter-blitz-host-edition/v0.4.0", "letter-blitz-host-edition/v0.3.0", "letter-blitz-host-edition/v0.2.0", "letter-blitz-host-edition/v0.1.0"];
       const FRIENDLY_LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "R", "S", "T", "W"];
       const HARD_LETTERS = ["Q", "U", "V", "X", "Y", "Z"];
       const PLAYER_COLOURS = ["var(--player-1)", "var(--player-2)", "var(--player-3)", "var(--player-4)", "var(--player-5)", "var(--player-6)", "var(--player-7)", "var(--player-8)"];
       const CATEGORY_DATA_URL = "data/categories.json";
       const STOP_WORDS = new Set(["a", "an", "and", "de", "da", "del", "for", "from", "in", "of", "on", "or", "the", "to", "with"]);
+
+      const REDCAP_IMAGE_PATHS = [
+        "assets/redcap/redcap02.png",
+        "assets/redcap/redcap03.png",
+        "assets/redcap/redcap04.png",
+        "assets/redcap/redcap05.png",
+        "assets/redcap/redcap06.png",
+        "assets/redcap/redcap07.png",
+        "assets/redcap/redcap08.png",
+        "assets/redcap/redcap09.png",
+        "assets/redcap/redcap010.png",
+        "assets/redcap/redcap011.png",
+        "assets/redcap/redcap012.png",
+        "assets/redcap/redcap013.png",
+        "assets/redcap/redcap014.png",
+        "assets/redcap/redcap015.png",
+        "assets/redcap/redcap016.png",
+        "assets/redcap/redcap017.png",
+        "assets/redcap/redcap018.png",
+        "assets/redcap/redcap019.png",
+      ];
 
       let state = createDefaultState();
       let timerInterval = null;
@@ -15,6 +36,7 @@
       let timeUpFlashTimeout = null;
       let categoryBank = [];
       let categoryLoadError = "";
+      let lastRedcapImagePath = null;
 
       const els = {
         heroTitle: document.getElementById("heroTitle"),
@@ -396,6 +418,11 @@
         });
 
         state.currentRound = createRound(selectedLetter, selectedCategories);
+        showRoundStartOverlay({
+          letter: selectedLetter,
+          durationSeconds: state.settings.roundSeconds,
+          categories: selectedCategories,
+        });
         state.timer.remaining = state.settings.roundSeconds;
         state.timer.finished = false;
         saveState();
@@ -620,9 +647,119 @@
         const playerId = button.dataset.playerId;
         const cell = getRoundCell(categoryIndex, playerId);
         if (!cell) return;
+        const wasManualInvalid = cell.manualInvalid;
         cell.manualInvalid = !cell.manualInvalid;
         saveState();
         refreshScoring();
+        if (!wasManualInvalid && cell.manualInvalid) {
+          showRedcapBurst();
+        }
+      }
+
+      function getRandomRedcapImagePath() {
+        if (!Array.isArray(REDCAP_IMAGE_PATHS) || REDCAP_IMAGE_PATHS.length === 0) {
+          return null;
+        }
+
+        if (REDCAP_IMAGE_PATHS.length === 1) {
+          lastRedcapImagePath = REDCAP_IMAGE_PATHS[0];
+          return REDCAP_IMAGE_PATHS[0];
+        }
+
+        let nextPath = REDCAP_IMAGE_PATHS[Math.floor(Math.random() * REDCAP_IMAGE_PATHS.length)];
+        let safetyCounter = 0;
+        while (nextPath === lastRedcapImagePath && safetyCounter < 10) {
+          nextPath = REDCAP_IMAGE_PATHS[Math.floor(Math.random() * REDCAP_IMAGE_PATHS.length)];
+          safetyCounter += 1;
+        }
+
+        lastRedcapImagePath = nextPath;
+        return nextPath;
+      }
+
+      function showRedcapBurst() {
+        const imagePath = getRandomRedcapImagePath();
+        if (!imagePath) return;
+
+        const existingOverlay = document.querySelector(".redcap-burst-overlay");
+        if (existingOverlay) {
+          existingOverlay.remove();
+        }
+
+        const overlay = document.createElement("div");
+        overlay.className = "redcap-burst-overlay";
+
+        const image = document.createElement("img");
+        image.className = "redcap-burst-image";
+        image.src = imagePath;
+        image.alt = "Redcap";
+        image.decoding = "async";
+        image.onerror = () => {
+          overlay.remove();
+        };
+
+        overlay.appendChild(image);
+        document.body.appendChild(overlay);
+
+        window.setTimeout(() => {
+          overlay.classList.add("redcap-burst-overlay--leaving");
+        }, 3200);
+
+        window.setTimeout(() => {
+          overlay.remove();
+        }, 3900);
+      }
+
+      function showRoundStartOverlay({ letter, durationSeconds, categories }) {
+        const existingOverlay = document.querySelector(".round-start-overlay");
+        if (existingOverlay) existingOverlay.remove();
+
+        const safeLetter = letter || "?";
+        const safeDuration = Number(durationSeconds) > 0 ? Number(durationSeconds) : null;
+        const safeCategories = Array.isArray(categories) ? categories.filter(Boolean) : [];
+
+        const overlay = document.createElement("div");
+        overlay.className = "round-start-overlay";
+        overlay.setAttribute("role", "dialog");
+        overlay.setAttribute("aria-modal", "true");
+        overlay.setAttribute("aria-label", "Round starting");
+
+        const panel = document.createElement("div");
+        panel.className = "round-start-panel";
+        panel.innerHTML = `
+          <div class="round-start-eyebrow">Round starting</div>
+          <div class="round-start-letter-block">
+            <div class="round-start-label">Letter</div>
+            <div class="round-start-letter">${escapeHtml(String(safeLetter))}</div>
+          </div>
+          <div class="round-start-timer"><span>Timer</span><strong>${safeDuration ? `${safeDuration}s` : "On screen"}</strong></div>
+          <div class="round-start-categories">
+            <div class="round-start-categories-title">Categories</div>
+            <div class="round-start-category-list">
+              ${safeCategories.length ? safeCategories.map((category) => `<div class="round-start-category-pill">${escapeHtml(String(category))}</div>`).join("") : '<div class="round-start-category-pill round-start-category-pill--empty">No categories selected</div>'}
+            </div>
+          </div>
+          <div class="round-start-hint">Tap, click, or press Escape to dismiss</div>
+        `;
+
+        const dismiss = () => {
+          if (!document.body.contains(overlay)) return;
+          overlay.classList.add("round-start-overlay--leaving");
+          window.setTimeout(() => overlay.remove(), 260);
+          document.removeEventListener("keydown", handleKeydown);
+        };
+
+        const handleKeydown = (event) => {
+          if (event.key === "Escape") dismiss();
+        };
+
+        overlay.addEventListener("click", dismiss);
+        panel.addEventListener("click", (event) => event.stopPropagation());
+        document.addEventListener("keydown", handleKeydown);
+
+        overlay.appendChild(panel);
+        document.body.appendChild(overlay);
+        window.setTimeout(dismiss, 3000);
       }
 
       function handleAnswerKeydown(event) {
@@ -831,7 +968,7 @@
                               data-player-id="${player.id}"
                               ${state.currentRound.committed || !cell.displayText ? "disabled" : ""}
                             >
-                              ${cell.manualInvalid ? "Undo" : "Reject"}
+                              ${cell.manualInvalid ? "Undo" : "Redcap"}
                             </button>
                           </div>
                         </div>
@@ -910,7 +1047,7 @@
 
             const button = card.querySelector(".review-toggle");
             if (button) {
-              button.textContent = cellData.manualInvalid ? "Undo" : "Reject";
+              button.textContent = cellData.manualInvalid ? "Undo" : "Redcap";
               button.classList.toggle("is-rejected", cellData.manualInvalid);
               button.disabled = state.currentRound.committed || !cellData.displayText;
             }
@@ -1224,7 +1361,7 @@
               cell.statusLabel = "Blank";
             } else if (cell.manualInvalid) {
               cell.status = "invalid";
-              cell.statusLabel = "Rejected";
+              cell.statusLabel = "Redcapped";
             } else if (cell.wrongLetter) {
               cell.status = "invalid";
               cell.statusLabel = "Wrong letter";
