@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is inspired by Keep a Changelog.
 Versioning is lightweight for now because this is an early internal tool, not a spacecraft.
 
+## [0.5.0] - 2026-05-15
+
+### Changed
+
+- rebranded host-facing reject wording to **Redcap** across review controls, board legend, and rules text
+- added a random full-screen Redcap burst overlay when a host redcaps an answer, including repeat-safe image rotation and missing-asset fail-safe handling
+- added a full-screen round-start briefing overlay showing the selected letter, timer, and categories for clearer Teams screen sharing
+- bumped local storage key to `letter-blitz-host-edition/v0.5.0` with safe legacy load from `v0.4.0`, `v0.3.0`, `v0.2.0`, and `v0.1.0`
+
 ## [0.4.0] - 2026-04-21
 
 ### Changed
