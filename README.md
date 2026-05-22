@@ -4,13 +4,13 @@ Letter Blitz Host Edition is a host-led, browser-only letter/category game built
 
 ## Version
 
-Current version: **0.4.0**.
+Current version: **0.6.0**.
 
 ## What it includes
 
 - up to **8 competitors**
 - **10, 11, or 12 categories** per round
-- **60, 75, or 90 second** timer
+- **45, 60, 75, 90, or 120 second** timer
 - setup-first flow with separate **Setup** and **Game** views
 - lean live game screen focused on round controls, timer, categories, answer board, scores, and history access
 - host-run answer entry board with manual **Reject** control
@@ -69,10 +69,12 @@ If the JSON file is missing or unavailable, the app fails gracefully by showing 
 
 Session state is saved to local storage under:
 
-- `letter-blitz-host-edition/v0.4.0`
+- `letter-blitz-host-edition/v0.6.0`
 
 A safe legacy load path is included for:
 
+- `letter-blitz-host-edition/v0.5.0`
+- `letter-blitz-host-edition/v0.4.0`
 - `letter-blitz-host-edition/v0.3.0`
 - `letter-blitz-host-edition/v0.2.0`
 - `letter-blitz-host-edition/v0.1.0`

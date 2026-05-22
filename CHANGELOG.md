@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is inspired by Keep a Changelog.
 Versioning is lightweight for now because this is an early internal tool, not a spacecraft.
 
+## [0.6.0] - 2026-05-22
+
+### Changed
+
+- expanded round timer options to **45, 60, 75, 90, and 120 seconds** across setup controls and round-length validation
+- kept timer persistence safe by retaining legacy local storage support while bumping the primary key to `letter-blitz-host-edition/v0.6.0`
+- expanded `data/categories.json` with 150 new everyday, office-friendly categories to reduce repetition bias and improve session variety
+
 ## [0.5.0] - 2026-05-15
 
 ### Changed
