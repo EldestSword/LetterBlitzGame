@@ -1,8 +1,8 @@
     (() => {
       "use strict";
 
-      const STORAGE_KEY = "letter-blitz-host-edition/v0.5.0";
-      const LEGACY_STORAGE_KEYS = ["letter-blitz-host-edition/v0.4.0", "letter-blitz-host-edition/v0.3.0", "letter-blitz-host-edition/v0.2.0", "letter-blitz-host-edition/v0.1.0"];
+      const STORAGE_KEY = "letter-blitz-host-edition/v0.6.0";
+      const LEGACY_STORAGE_KEYS = ["letter-blitz-host-edition/v0.5.0", "letter-blitz-host-edition/v0.4.0", "letter-blitz-host-edition/v0.3.0", "letter-blitz-host-edition/v0.2.0", "letter-blitz-host-edition/v0.1.0"];
       const FRIENDLY_LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "R", "S", "T", "W"];
       const HARD_LETTERS = ["Q", "U", "V", "X", "Y", "Z"];
       const PLAYER_COLOURS = ["var(--player-1)", "var(--player-2)", "var(--player-3)", "var(--player-4)", "var(--player-5)", "var(--player-6)", "var(--player-7)", "var(--player-8)"];
@@ -143,7 +143,7 @@
           state.settings = createDefaultState().settings;
         }
 
-        state.settings.roundSeconds = [60, 75, 90].includes(Number(state.settings.roundSeconds)) ? Number(state.settings.roundSeconds) : 75;
+        state.settings.roundSeconds = [45, 60, 75, 90, 120].includes(Number(state.settings.roundSeconds)) ? Number(state.settings.roundSeconds) : 75;
         state.settings.categoryCount = [10, 11, 12].includes(Number(state.settings.categoryCount)) ? Number(state.settings.categoryCount) : 12;
         state.settings.friendlyLettersOnly = state.settings.friendlyLettersOnly !== false;
 
@@ -226,7 +226,7 @@
           const button = event.target.closest("[data-action='set-round-seconds']");
           if (!button) return;
           const value = Number(button.dataset.value);
-          if (![60, 75, 90].includes(value)) return;
+          if (![45, 60, 75, 90, 120].includes(value)) return;
           state.settings.roundSeconds = value;
           if (!state.timer.running && (!state.currentRound || !hasAnyTypedAnswer(state.currentRound) || state.currentRound.committed)) {
             state.timer.remaining = value;
