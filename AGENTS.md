@@ -4,119 +4,102 @@ This file tells code agents how to behave when editing this repo.
 
 ## Project intent
 
-This repo contains a **host-led, browser-only, Teams-friendly letter/category game**.
+Letter Blitz is a **host-led, browser-only, Teams-friendly letter/category game** with two distinct surfaces:
+
+- `index.html` — private **Control** screen for the host
+- `live.html` — audience **Live** presentation screen
 
 The current product shape is deliberate:
 
-- **split static structure (`index.html`, `styles.css`, `app.js`, `data/categories.json`)**
-- **no backend**
-- **no accounts**
-- **no room codes**
-- **no external dependencies**
-- **manual host validation**
-- **automatic duplicate + repeated-answer + alliteration scoring**
+- static HTML/CSS/JS
+- no backend
+- no accounts
+- no room codes
+- no external dependencies
+- manual host validation
+- automatic duplicate + repeated-answer + alliteration scoring
 
-Do not casually drag it into framework-land because a shiny abstraction looked lonely.
+Do not turn it into framework-land because a dependency looked lonely.
 
 ## Core rules to preserve
 
-1. **Keep the host-led model** unless explicitly told to build multiplayer.
-2. **Preserve the scoring rules**:
+1. Keep the host-led model unless explicitly asked for multiplayer.
+2. Preserve scoring:
    - blank = 0
    - wrong letter = 0
-   - rejected answer = 0
-   - duplicate valid answers in the same category = 0 for all duplicates
-   - repeated accepted answers by the same competitor across categories in one round = 0 for all repeated uses
+   - Redcapped = 0
+   - duplicate accepted answers in the same category = 0 for all duplicates
+   - same-player repeated accepted answer across categories in one round = 0 for all repeats
    - unique valid answer = 1
    - unique valid alliterative answer = 2
-3. **Keep British English** in UI copy and documentation.
-4. **Assume a maximum of 8 competitors** unless explicitly changed.
-5. **Keep local storage support** or provide a safe migration if storage keys change.
+3. Keep British English.
+4. Maximum 8 competitors unless explicitly changed.
+5. Never silently drop current scores, history or a live round.
+6. The Live screen must not expose answers while a timed round is in progress.
+7. Redcap artwork in `assets/redcap/` is part of the product and must not be discarded during redesigns.
+
+## Data safety
+
+v1 deliberately continues to use:
+
+`letter-blitz-host-edition/v0.6.0`
+
+Do not change this key casually. It is what allows the current production session to survive the v1 UI overhaul.
+
+A one-time pre-v1 backup is also written to:
+
+`letter-blitz-host-edition/pre-v1.0.0-backup`
+
+If a future state-shape change is genuinely required, add an explicit safe migration and document it.
 
 ## Change strategy
 
-Until the user asks otherwise:
+Keep the static structure:
 
-- keep the split static structure:
-  - `index.html`
-  - `styles.css`
-  - `app.js`
-  - `data/categories.json`
-- prefer **small, careful refactors**
-- do not introduce a build step
-- do not add package tooling
-- do not add CDNs or third-party libraries unless there is a very strong reason
+- `index.html`
+- `styles.css`
+- `app.js`
+- `live.html`
+- `live.css`
+- `live.js`
+- `data/categories.json`
+- `assets/redcap/`
 
-## Documentation and versioning rules
+Avoid build steps, package tooling, CDNs or third-party libraries without a compelling reason.
 
-For any user-facing or repo-relevant change:
+## Control UX
 
-1. **Always update `CHANGELOG.md`** in the same piece of work.
-2. **Bump the version** for any meaningful change.
-3. Keep changelog entries clear and human-readable.
-4. Preserve British English in documentation.
+Control is allowed to be information-dense, but it should remain fast and legible.
 
-## UX expectations
+Prefer:
 
-The UI should feel:
+- category-by-category judging
+- obvious keyboard flow
+- persistent round context
+- compact standings
+- destructive actions behind confirmation
 
-- polished
-- legible on a shared Teams screen
-- obviously interactive
-- easy for the host to operate quickly
+Avoid resurrecting the old wide spreadsheet-style scoring grid.
 
-Avoid:
+## Live UX
 
-- cramped layouts
-- tiny text
-- gimmicky animations that slow down use
-- visual clutter inside the answer grid
+Live is an audience surface, not an admin screen.
 
-## Technical guardrails
+It should:
 
-### HTML / CSS / JS
+- read clearly through Teams screen sharing
+- keep the round letter and categories visible during play
+- keep answers hidden during play
+- follow Control during answer reveal
+- show Redcap moments and results cleanly
 
-- keep code readable and well sectioned
-- use semantic HTML where practical
-- keep CSS grouped by feature area
-- keep JavaScript functions reasonably small
-- avoid deeply nested event logic when a clearer helper will do
+Do not add setup controls, text inputs or host-only diagnostics to Live.
 
-### State management
+## Documentation and versioning
 
-- preserve the existing state shape where possible
-- if state changes are necessary, migrate old local storage data safely
-- do not silently drop live session data
+For meaningful user-facing changes:
 
-### Scoring logic
-
-- duplicate detection happens **within each category row only**
-- same-player repeated-answer detection happens **across categories within one round**
-- both duplicate/repeated checks run **after invalid and rejected answers are excluded**
-- alliteration is a **bonus**, not a replacement scoring mode
-- duplicate answers never keep the alliteration bonus
-- repeated answers never keep the alliteration bonus
-
-### Input tidying
-
-- normalise for scoring
-- keep visible text tidy but predictable
-- do not over-aggressively “fix” user-entered wording
-
-## Things not to do unless explicitly asked
-
-- do not build a backend
-- do not add authentication
-- do not add websockets
-- do not turn it into React/Vue/Svelte because you got bored
-- do not replace the manual host review model with brittle AI validation
-- do not rename the product without being asked
-
-## Product tone
-
-The tool can be playful, but the copy should stay clean and confident.
-
-Think:
-- polished internal microsite
-- light game-show energy
-- not a novelty toy made at 2am after three coffees
+1. update `CHANGELOG.md`
+2. bump the documented app version
+3. keep documentation in British English
+4. explain any persistence/storage change explicitly

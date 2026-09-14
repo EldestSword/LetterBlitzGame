@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Letter Blitz Live</title>
+  <meta name="description" content="Letter Blitz audience presentation screen." />
+  <link rel="stylesheet" href="live.css" />
+  <style>:root{--player-1:#63d8ff;--player-2:#9e86ff;--player-3:#46dda3;--player-4:#ffc36d;--player-5:#ff7da8;--player-6:#91ef76;--player-7:#ff946f;--player-8:#66a7ff}</style>
+</head>
+<body>
+  <main class="live-shell">
+    <header class="live-topbar">
+      <div class="live-brand">
+        <div class="brand-mark">LB</div>
+        <div>
+          <span class="eyebrow">Live</span>
+          <strong>Letter Blitz</strong>
+        </div>
+      </div>
+      <div class="live-actions">
+        <span id="syncStatus" class="sync-status">Waiting for Control</span>
+        <button id="fullscreenBtn" class="fullscreen-btn" type="button">Full screen</button>
+      </div>
+    </header>
+
+    <section id="waitingView" class="live-view waiting-view">
+      <div class="waiting-hero">
+        <div class="waiting-orb">?</div>
+        <p class="eyebrow">Letter Blitz</p>
+        <h1>Waiting for the next round</h1>
+        <p>The host is getting things ready.</p>
+      </div>
+      <div id="waitingLeaderboard" class="waiting-leaderboard"></div>
+    </section>
+
+    <section id="roundView" class="live-view round-view" hidden>
+      <div class="round-live-grid">
+        <div class="round-live-letter-card">
+          <div class="round-live-kicker">Round <span id="liveRoundNumber">1</span></div>
+          <div id="liveLetter" class="round-live-letter">?</div>
+          <div class="round-live-label">Your letter</div>
+        </div>
+
+        <div class="round-live-main">
+          <div class="round-live-head">
+            <div>
+              <p class="eyebrow">Your categories</p>
+              <h1>Make every answer count.</h1>
+            </div>
+            <div id="liveTimerCard" class="live-timer-card">
+              <span id="liveTimerStatus">Ready</span>
+              <strong id="liveTimerValue">1:15</strong>
+            </div>
+          </div>
+          <div id="liveCategoryGrid" class="live-category-grid"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="revealView" class="live-view reveal-view" hidden>
+      <div class="reveal-head">
+        <div class="reveal-letter"><span id="revealLetter">?</span></div>
+        <div class="reveal-title-wrap">
+          <p id="revealProgress" class="eyebrow">Category 1 of 12</p>
+          <h1 id="revealCategory">Category</h1>
+        </div>
+      </div>
+      <div id="revealGrid" class="reveal-grid"></div>
+      <div id="revealCategoryDots" class="reveal-dots"></div>
+    </section>
+
+    <section id="resultsView" class="live-view results-view" hidden>
+      <div class="results-heading">
+        <p class="eyebrow">Round complete</p>
+        <h1 id="resultsTitle">Scores locked in</h1>
+        <p id="resultsSubtitle">Here’s what that round did to the table.</p>
+      </div>
+      <div class="results-grid">
+        <div class="results-panel">
+          <h2>This round</h2>
+          <div id="roundResultsList" class="round-results-list"></div>
+        </div>
+        <div class="results-panel standings-panel">
+          <h2>Session standings</h2>
+          <div id="resultsLeaderboard" class="results-leaderboard"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="liveRedcapOverlay" class="redcap-overlay" hidden aria-hidden="true">
+    <div class="redcap-flash">
+      <img id="liveRedcapImage" alt="" />
+      <div class="redcap-stamp">REDCAPPED</div>
+    </div>
+  </div>
+
+  <script src="live.js"></script>
+</body>
+</html>
