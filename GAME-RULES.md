@@ -2,56 +2,40 @@
 
 ## Round flow
 
-1. Spin a round to generate one letter and a category set.
-2. Start the timer.
-3. Players answer privately.
-4. During reveal, the host types answers into the board.
-5. Leave blank answers empty (they score 0).
-6. Reject any answer that should not count.
-7. Finalise the round to add totals to the session leaderboard.
+1. Open **Live** from the Control screen and share the Live window in Teams.
+2. Spin a round to generate one letter and the category set.
+3. The letter and categories remain visible on Live for the whole timed round.
+4. Start the timer.
+5. Players write their answers privately.
+6. When the round ends, use the Reveal Desk in Control to enter answers one category at a time.
+7. The Live screen follows whichever category is selected in Control.
+8. Redcap any answer that should not count.
+9. Finalise the round to add its scores to the session standings.
 
 ## Core scoring
 
 - Blank answer: **0**
 - Wrong starting letter: **0**
-- Rejected answer: **0**
+- Redcapped answer: **0**
 - Unique valid answer: **1**
 - Unique valid alliterative answer: **2**
 
-## Duplicate rule (across players, same category)
+## Duplicate rule
 
-Duplicates are checked within each category row.
+Duplicates are checked across players within the same category.
 
-If two or more competitors give the same valid answer in that row, all matching cells score **0**.
+If two or more players give the same accepted answer in that category, every matching answer scores **0**.
 
-## Repeated-answer rule (same player, across categories)
+## Repeated-answer rule
 
-Within one round, if the same competitor uses the same accepted answer in more than one category, every repeated use of that answer in that round scores **0**.
+If the same player uses the same accepted answer in more than one category during a round, every repeated use scores **0**.
 
-Example (letter **L**):
+Duplicate and repeat checks happen after blanks, wrong-letter answers and Redcaps are excluded.
 
-- Drink: `Lemonade`
-- Something nice on a hot day: `Lemonade`
+## Alliteration
 
-Result: both score **0** for that competitor.
+Alliteration is a bonus only when an answer is otherwise valid, unique in its category and not repeated by that player elsewhere in the round.
 
-## How duplicate and repeated checks differ
-
-- **Duplicate rule** compares players against each other in one category row.
-- **Repeated-answer rule** compares one player against their own answers across category rows.
-
-Both checks use normalised scoring text and are recalculated live while editing.
-
-## Alliteration interaction
-
-Alliteration only awards 2 points when an answer is:
-
-- valid,
-- unique within its category row,
-- and not repeated by the same player elsewhere in the same round.
-
-If an answer is duplicate or repeated, it does not keep the alliteration bonus.
-
-## Friendly letters mode
+## Friendly letters
 
 Friendly letters mode skips: `Q`, `U`, `V`, `X`, `Y`, `Z`.
